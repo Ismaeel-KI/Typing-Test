@@ -92,29 +92,28 @@ def reset_text_area():
     count = 0
 
 
-"""
+BG = 'light blue'
+FG = 'white'
 
-1. Display the window
-"""
 heading = "SPEED CHECK !"
 instruction = "TEST STARTS WHEN YOU ENTER THE WORD"
 
 window = Tk()
 
 window.title('Type Writing Speed Test')
-window.config(bg='black')
+window.config(bg=BG)
 
-heading_box = Label(window, text=heading, font=('Helvetica', 20), bg='black', fg='blue')
-instruction_box = Label(window, text=instruction, font=('Helvetica', 20), bg='black',fg='blue')
+heading_box = Label(window, text=heading, font=('Helvetica', 16), bg=BG , fg=FG)
+instruction_box = Label(window, text=instruction, font=('Helvetica', 14), bg=BG ,fg=FG)
 
-typing_area = Text(window, font=('arial', 14), bg='white', fg='black',wrap='w', padx=5, pady=5, highlightthickness=4)
+typing_area = Text(window, font=('arial', 14), bg='white', fg='black' ,wrap='w', padx=20, pady=5, highlightthickness=4)
 typing_area.bind('<KeyPress>', start_checking)
 
 reset_btn = Button(window, text='Reset', width=125, command= reset_text_area ,highlightthickness=1 , highlightcolor='black')
 
 heading_box.pack(pady=23)
 instruction_box.pack(pady=23)
-text_to_type = Label(window, font=('Helvetica', 20), bg='black', fg='blue', highlightthickness=4, highlightcolor='blue', border=3)
+text_to_type = Label(window, font=('Helvetica', 14), bg=BG, fg='blue')
 display_text(text_to_display)
 typing_area.pack()
 reset_btn.pack(pady=23)
