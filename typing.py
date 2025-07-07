@@ -18,27 +18,35 @@ def display_text(text_to_display):
 def wpm_calculate():
     pass
 
-def check_letters(sentence, orginal_text):
-    global errors, user_line, typing_area
+def check_letters(sentence, original_text):
+    global errors, typing_area
 
-    errors = 0  # Reset error count every check
+    errors = 0
     typing_area.tag_remove("wrong", "1.0", END)
     typing_area.tag_remove("correct", "1.0", END)
 
-    for i in range(min(len(sentence), len(orginal_text))):
-        index = f"1.{i}"
-        next_index = f"1.{i + 1}"
 
-        if sentence[i] == orginal_text[i]:
-            typing_area.tag_add("correct", index, next_index)
+    result_frame = Frame(window, name="result_frame", bg="black")
+    result_frame.pack(pady=10)
+
+    result_display = Text(result_frame, height=1, font=("Helvetica", 14), bg="black", bd=0)
+    result_display.tag_config("correct", foreground="green")
+    result_display.tag_config("wrong", foreground="red")
+
+    for i in range(len(sentence)):
+        char = sentence[i]
+        if i < len(original_text) and char == original_text[i]:
+            result_display.insert(END, char, "correct")
         else:
             errors += 1
-            typing_area.delete(index, next_index)
-            typing_area.insert(index, sentence[i])
-            typing_area.tag_add("wrong", index, f"1.{i + 1}")
+            result_display.insert(END, char, "wrong")
 
-    typing_area.tag_config("correct", foreground="green")
-    typing_area.tag_config("wrong", foreground="red")
+    result_display.config(state="disabled")
+    result_display.pack(side='left', padx=20)
+
+    error_label = Label(result_frame, text=f"Errors: {errors}", font=("Helvetica", 14), bg="black", fg="white")
+    error_label.pack(side='left', padx=20)
+
     print("Errors:", errors)
 
 def start_checking(event):
@@ -47,17 +55,20 @@ def start_checking(event):
     if start_time is None:
         start_time = time.time()
 
-    if time.time() - start_time >= 30:
+    if time.time() - start_time >= 100000:
         print("Time's Up")
+        print(user_line)
         check_letters(user_line, text_to_display)
         return
 
     if len(user_line) >= len(text_to_display):
         print('Sentence finished')
+        print(user_line)
         check_letters(user_line, text_to_display)
         user_line = ''
+        typing_area.delete('1.0', END)
         next_text = random_pick()
-        while text_to_display != next_text:
+        while text_to_display == next_text:
             next_text = random_pick()
         text_to_display = next_text
         display_text(text_to_display)
